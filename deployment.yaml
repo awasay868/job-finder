@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:  
+ name: job-finder-deployment
+spec:      
+ replicas: 2
+ selector: 
+  matchLabels:
+   app: job-finder-deployment
+ template: 
+  metadata:
+    labels: 
+      app: job-finder-deployment
+  spec:
+   volumes:
+   - name: job-finder-vol
+     persistentVolumeClaim:
+      claimName: job_finder-persistentvoluume
+   containers:
+   - name: job-finder
+     image: awasay/job_finder:v1
+     imagePullPolicy: IfNotPresent
+     ports:
+     - containerPort: 80
+     volumeMounts:
+     - name: job-finder-vol
+       mountPath: /data
+     livenessProbe:
+      httpGet:
+       port: 80
+       path: /
+      failureThreshold: 2
+      periodSeconds: 15
+      initialDelaySeconds:
+     readinessProbe:
+      httpGet:
+       port: 80
+       path: /
+ strategy:
+  rollingUpdate:
+   maxSurge: 1
+   maxUnavailable: 0
+  type: RollingUpdate
