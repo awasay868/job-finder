@@ -30,4 +30,4 @@ jobs:
       run: npm install -g surge
       
     - name: Run Surge
-      run: surge ./ bootcamp2020wasay.surge.sh --token ${(secret.SURGE_TOKEN)}
+      run: surge ./ bootcamp2020awasay.surge.sh --token ${(secret.SURGE_TOKEN)}
